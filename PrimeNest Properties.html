@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PrimeNest Properties</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14213D; --sand:#EDE6D6; --sienna:#B5541F; --char:#241F1B;
+  --card:#FFFFFF; --taupe:#C9BFA8; --line: rgba(36,31,27,.14);
+  --bg: var(--sand); --fg: var(--char); --nav-bg: var(--ink); --nav-fg:#F3EEE2;
+  --wa:#25D366;
+  box-sizing:border-box;
+  padding-top: env(safe-area-inset-top,0px);
+  padding-bottom: env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#171310; --fg:#EDE6D6; --card:#211C18; --line:rgba(237,230,214,.14); }
+}
+:root[data-theme="dark"]{ --bg:#171310; --fg:#EDE6D6; --card:#211C18; --line:rgba(237,230,214,.14); }
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,sans-serif;line-height:1.5;}
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:500;line-height:1.15;color:var(--fg);}
+a{color:inherit;}
+img,svg{max-width:100%;display:block;}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+header{position:sticky;top:0;z-index:10;background:var(--nav-bg);color:var(--nav-fg);
+  padding-top:env(safe-area-inset-top,0px);}
+.navrow{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;max-width:1080px;margin:0 auto;}
+.logo{font-family:'Fraunces',serif;font-size:1.3rem;letter-spacing:.02em;}
+.logo span{color:#E3A15B;}
+nav{display:flex;gap:28px;flex-wrap:wrap;}
+nav button{background:none;border:none;color:var(--nav-fg);font:inherit;font-size:.95rem;cursor:pointer;
+  padding:6px 2px;border-bottom:2px solid transparent;opacity:.82;}
+nav button:hover,nav button:focus-visible{opacity:1;}
+nav button.active{border-bottom-color:#E3A15B;opacity:1;}
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+  outline:2px solid var(--sienna); outline-offset:2px;}
+
+.page{display:none;}
+.page.active{display:block;}
+
+.hero{padding:72px 0 56px;}
+.hero h1{font-size:clamp(2.1rem,5vw,3.4rem);max-width:14ch;margin-bottom:18px;}
+.hero p{max-width:46ch;color:var(--fg);opacity:.82;font-size:1.05rem;margin-bottom:28px;}
+.btn{display:inline-block;background:var(--sienna);color:#fff;padding:13px 26px;border-radius:2px;
+  text-decoration:none;font-weight:500;font-size:.95rem;border:none;cursor:pointer;font-family:inherit;}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--fg);}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+
+.stats{display:flex;gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:48px 0;}
+.stats div{flex:1;padding:22px 24px;border-right:1px solid var(--line);}
+.stats div:last-child{border-right:none;}
+.stats strong{display:block;font-family:'Fraunces',serif;font-size:1.7rem;font-weight:500;}
+.stats span{font-size:.85rem;opacity:.7;}
+
+section.block{padding:36px 0;}
+.block h2{font-size:1.7rem;margin-bottom:6px;}
+.block .lede{opacity:.72;max-width:52ch;margin-bottom:28px;}
+
+.p-art{position:relative;height:190px;overflow:hidden;background:#cfd9dd;}
+.p-art svg{height:100%;width:100%;}
+.detail-hero.p-art{height:280px;}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px;}
+.card{background:var(--card);border:1px solid var(--line);cursor:pointer;transition:transform .15s ease;}
+.card:hover{transform:translateY(-3px);}
+.card .body{padding:16px 18px 20px;}
+.card h3{font-size:1.1rem;margin-bottom:3px;}
+.card .loc{font-size:.85rem;opacity:.65;margin-bottom:10px;}
+.card .price{font-family:'Fraunces',serif;color:var(--sienna);font-size:1.15rem;margin-bottom:10px;}
+.card .specs{display:flex;gap:14px;font-size:.82rem;opacity:.75;}
+
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px;}
+.filters select,.filters input{padding:10px 12px;border:1px solid var(--line);background:var(--card);
+  color:var(--fg);font:inherit;font-size:.9rem;}
+
+/* Map */
+.map-wrap{background:var(--card);border:1px solid var(--line);padding:20px;margin-bottom:32px;}
+.map-wrap h3{font-size:1rem;margin-bottom:12px;}
+.map-svg{width:100%;height:auto;}
+.map-pin{cursor:pointer;}
+.map-pin circle{transition:r .12s ease;}
+.map-pin:hover circle, .map-pin.active circle{r:9;}
+.map-pin text{font-family:'Inter',sans-serif;font-size:10px;fill:var(--ink);}
+.map-legend{font-size:.82rem;opacity:.7;margin-top:8px;}
+
+.detail-body{padding:32px 0 60px;}
+.detail-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:6px;}
+.detail-body h1{font-size:2rem;}
+.detail-body .loc{opacity:.65;margin-bottom:18px;}
+.detail-price{font-family:'Fraunces',serif;color:var(--sienna);font-size:1.6rem;}
+.spec-row{display:flex;gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:22px 0 26px;}
+.spec-row div{flex:1;padding:16px 18px;border-right:1px solid var(--line);}
+.spec-row div:last-child{border-right:none;}
+.spec-row strong{display:block;font-size:1.1rem;}
+.spec-row span{font-size:.8rem;opacity:.65;}
+.detail-cols{display:grid;grid-template-columns:2fr 1fr;gap:40px;}
+.feat-list{list-style:none;margin-top:14px;}
+.feat-list li{padding:9px 0;border-bottom:1px solid var(--line);font-size:.95rem;}
+.agent-card{background:var(--card);border:1px solid var(--line);padding:22px;height:fit-content;}
+.agent-card h3{font-size:1.05rem;margin-bottom:4px;}
+.agent-card p{font-size:.88rem;opacity:.75;margin-bottom:16px;}
+.agent-card .btn{width:100%;text-align:center;margin-bottom:10px;}
+.wa-inline{background:var(--wa)!important;}
+@media (max-width:720px){.detail-cols{grid-template-columns:1fr;}}
+
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;margin-top:8px;}
+.team{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:18px;margin-top:22px;}
+.team div{text-align:left;}
+.avatar{height:70px;width:70px;border-radius:50%;background:var(--ac,var(--sienna));margin-bottom:10px;}
+.team h4{font-size:.98rem;}
+.team span{font-size:.82rem;opacity:.65;}
+@media (max-width:720px){.about-grid{grid-template-columns:1fr;}}
+
+.contact-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:44px;margin-top:8px;}
+form{display:flex;flex-direction:column;gap:14px;}
+label{font-size:.85rem;opacity:.75;display:block;margin-bottom:5px;}
+input,textarea,select{width:100%;padding:12px 13px;border:1px solid var(--line);background:var(--card);
+  color:var(--fg);font:inherit;font-size:.95rem;}
+textarea{min-height:110px;resize:vertical;}
+.info-card{background:var(--card);border:1px solid var(--line);padding:24px;}
+.info-card p{font-size:.92rem;margin-bottom:14px;opacity:.85;}
+.confirm{margin-top:14px;font-size:.9rem;color:var(--sienna);display:none;}
+@media (max-width:720px){.contact-grid{grid-template-columns:1fr;}}
+
+footer{border-top:1px solid var(--line);padding:28px 0;margin-top:20px;font-size:.85rem;opacity:.65;}
+
+/* WhatsApp floating button */
+.wa-float{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  width:56px;height:56px;border-radius:50%;background:var(--wa);display:flex;align-items:center;
+  justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.28);z-index:20;text-decoration:none;}
+.wa-float svg{width:28px;height:28px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="navrow">
+    <div class="logo">Prime<span>Nest</span></div>
+    <nav>
+      <button data-page="home">Home</button>
+      <button data-page="listings">Listings</button>
+      <button data-page="about">About</button>
+      <button data-page="contact">Contact</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="page-home" class="page">
+    <div class="hero">
+      <h1>Properties chosen with the same care you'd choose a home.</h1>
+      <p>PrimeNest is a boutique agency working across Lagos, Abuja, Port Harcourt, Uyo and Ibadan — matching families and investors with houses worth staying in.</p>
+      <div class="hero-actions">
+        <button class="btn" data-page="listings">Browse listings</button>
+        <button class="btn ghost" data-page="contact">Talk to an agent</button>
+      </div>
+    </div>
+    <div class="stats">
+      <div><strong>118</strong><span>Homes placed since 2021</span></div>
+      <div><strong>5</strong><span>Cities covered</span></div>
+      <div><strong>9 days</strong><span>Average time to offer</span></div>
+    </div>
+    <section class="block">
+      <h2>Featured this month</h2>
+      <p class="lede">A short list, updated by hand — not everything we list, just what we'd show a friend.</p>
+      <div class="grid" id="featured-grid"></div>
+    </section>
+  </section>
+
+  <section id="page-listings" class="page">
+    <section class="block">
+      <h2>All listings</h2>
+      <p class="lede">Filter by city or price, or pick a pin on the map.</p>
+      <div class="map-wrap">
+        <h3>Where we operate</h3>
+        <svg class="map-svg" id="map-svg" viewBox="0 0 400 230" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="map-legend">Tap a city to filter listings below.</div>
+      </div>
+      <div class="filters">
+        <select id="filter-city"><option value="">All cities</option></select>
+        <select id="filter-price">
+          <option value="">Any price</option>
+          <option value="0-60000000">Under &#8358;60M</option>
+          <option value="60000000-150000000">&#8358;60M &#8211; &#8358;150M</option>
+          <option value="150000000-999999999">&#8358;150M and up</option>
+        </select>
+      </div>
+      <div class="grid" id="listings-grid"></div>
+    </section>
+  </section>
+
+  <section id="page-detail" class="page">
+    <div class="p-art detail-hero" id="detail-art"></div>
+    <div class="detail-body">
+      <div class="detail-top">
+        <div><h1 id="d-title"></h1><div class="loc" id="d-loc"></div></div>
+        <div class="detail-price" id="d-price"></div>
+      </div>
+      <div class="spec-row" id="d-specs"></div>
+      <div class="detail-cols">
+        <div>
+          <p id="d-desc"></p>
+          <h3 style="margin-top:24px;font-size:1.1rem;">Features</h3>
+          <ul class="feat-list" id="d-features"></ul>
+        </div>
+        <div class="agent-card">
+          <h3>Interested in this home?</h3>
+          <p>Book a viewing or ask a question — an agent replies within a day.</p>
+          <a class="btn wa-inline" id="d-wa" target="_blank" style="text-align:center;text-decoration:none;">Chat on WhatsApp</a>
+          <button class="btn ghost" data-page="listings">Back to listings</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="page-about" class="page">
+    <section class="block">
+      <h2>About PrimeNest</h2>
+      <div class="about-grid">
+        <div>
+          <p style="opacity:.85;">PrimeNest started in 2021 as a two-person outfit helping relatives find flats in Lagos without going through five different agents. It grew the way word-of-mouth grows: slowly, then all at once. We now work across five cities, but we've kept the habit that started it — one agent sees a deal through from first viewing to signed keys.</p>
+          <p style="opacity:.85;margin-top:14px;">We don't list everything. If a property wouldn't pass our own inspection, it doesn't go up.</p>
+        </div>
+        <div class="agent-card">
+          <h3>How we work</h3>
+          <p>Every listing is inspected in person. Prices are checked against three comparable sales before we publish. No property stays listed past 90 days without a review.</p>
+        </div>
+      </div>
+      <h3 style="margin-top:36px;">The team</h3>
+      <div class="team" id="team-grid"></div>
+    </section>
+  </section>
+
+  <section id="page-contact" class="page">
+    <section class="block">
+      <h2>Get in touch</h2>
+      <p class="lede">Tell us what you're looking for, and which listing (if any) caught your eye.</p>
+      <div class="contact-grid">
+        <form id="contact-form">
+          <div><label for="c-name">Full name</label><input id="c-name" required></div>
+          <div><label for="c-email">Email</label><input id="c-email" type="email" required></div>
+          <div><label for="c-prop">Property of interest (optional)</label><input id="c-prop"></div>
+          <div><label for="c-msg">Message</label><textarea id="c-msg" required></textarea></div>
+          <button class="btn" type="submit" style="align-self:flex-start;">Send message</button>
+          <p class="confirm" id="c-confirm">Thanks &#8212; an agent will reply within one business day.</p>
+        </form>
+        <div class="info-card">
+          <h3 style="margin-bottom:10px;">PrimeNest Properties</h3>
+          <p>12 Adeola Odeku Street, Victoria Island, Lagos</p>
+          <p>+234 701 234 5678<br>hello@primenest.example</p>
+          <p>Mon&#8211;Fri, 9am &#8211; 6pm WAT</p>
+          <a class="btn wa-inline" href="https://wa.me/2347012345678?text=Hi%20PrimeNest%2C%20I%27d%20like%20to%20ask%20about%20a%20property." target="_blank" style="text-decoration:none;display:block;text-align:center;">Chat on WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </section>
+
+</main>
+
+<footer><div class="wrap">PrimeNest Properties &#8212; demo site built for portfolio purposes. Listings and photos are illustrative.</div></footer>
+
+<a class="wa-float" id="wa-float" href="https://wa.me/2347012345678?text=Hi%20PrimeNest%2C%20I%27d%20like%20to%20ask%20about%20a%20property." target="_blank" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.386.7 4.61 1.905 6.476L4 29l7.72-1.85A11.94 11.94 0 0 0 16.001 27C22.63 27 28 21.627 28 15S22.63 3 16.001 3zm0 21.818a9.78 9.78 0 0 1-4.99-1.363l-.358-.213-4.58 1.098 1.12-4.463-.234-.372A9.77 9.77 0 0 1 6.182 15c0-5.42 4.4-9.818 9.819-9.818S25.818 9.58 25.818 15 21.42 24.818 16.001 24.818zm5.4-7.34c-.296-.149-1.751-.864-2.023-.963-.271-.099-.469-.148-.667.148-.198.297-.766.963-.939 1.161-.173.198-.346.223-.642.074-.296-.148-1.249-.46-2.379-1.468-.879-.784-1.472-1.752-1.645-2.048-.173-.297-.019-.457.13-.605.133-.132.297-.347.445-.52.148-.173.198-.297.297-.495.099-.198.05-.372-.025-.52-.074-.148-.667-1.608-.914-2.202-.24-.578-.485-.5-.667-.51l-.568-.01c-.198 0-.52.074-.792.372-.271.297-1.038 1.014-1.038 2.474s1.063 2.87 1.211 3.068c.148.198 2.093 3.196 5.073 4.481.709.306 1.262.489 1.693.626.711.226 1.359.194 1.871.118.571-.085 1.751-.716 1.998-1.407.247-.692.247-1.284.173-1.408-.074-.123-.271-.198-.568-.346z"/></svg>
+</a>
+
+<script>
+const ACCENTS = ['#B5541F','#3C5A45','#1F4E79','#7A5A2E','#6B3F52','#4E6A57','#8A5A3A','#2E5C6B'];
+const CITY_POS = { Lagos:[95,175], Abuja:[210,95], 'Port Harcourt':[150,190], Uyo:[195,175], Ibadan:[105,130] };
+
+const PROPERTIES = [
+  {id:1, title:'The Ilupeju Loft', city:'Lagos', price:85000000, beds:4, baths:5, size:420, roof:'gable',
+    desc:'A converted warehouse residence in Ilupeju with double-height living space and exposed brick, ten minutes from the Third Mainland Bridge.',
+    features:['Double-height living room','Private courtyard','24hr estate security','Solar backup with 10kVA inverter','Staff quarters']},
+  {id:2, title:'Maitama Garden Villa', city:'Abuja', price:120000000, beds:5, baths:6, size:650, roof:'hip',
+    desc:'A five-bedroom villa on a quiet cul-de-sac in Maitama, with mature garden landscaping and a self-contained boys\u2019 quarters.',
+    features:['Landscaped garden','Swimming pool','Smart home lighting','Borehole + treatment plant','2-car garage']},
+  {id:3, title:'Uyo Riverside Court', city:'Uyo', price:45000000, beds:3, baths:4, size:310, roof:'flat',
+    desc:'A modern three-bedroom bungalow near the Ibom Tropicana axis, built for a young family wanting space without the commute into town.',
+    features:['Fitted kitchen','Fenced compound','Prepaid electricity meter','Close to Ibom Tropicana','Ample parking']},
+  {id:4, title:'Trans-Amadi Heights', city:'Port Harcourt', price:60000000, beds:4, baths:4, size:380, roof:'gable',
+    desc:'A four-bedroom duplex in a gated estate off Trans-Amadi, popular with oil-and-gas professionals for its short drive to the industrial layout.',
+    features:['Gated estate','Backup generator house','Ensuite bedrooms','CCTV coverage','Visitor parking']},
+  {id:5, title:'Banana Island Residence', city:'Lagos', price:350000000, beds:6, baths:7, size:900, roof:'hip',
+    desc:'A six-bedroom waterfront residence on Banana Island with a private jetty frontage and staff wing \u2014 one of our rare listings above \u20a6300M.',
+    features:['Private jetty access','Home cinema','Elevator','Wine cellar','Full staff wing']},
+  {id:6, title:'Gwarinpa Courtyard House', city:'Abuja', price:75000000, beds:4, baths:5, size:400, roof:'flat',
+    desc:'A courtyard-style home in the 3rd Avenue axis of Gwarinpa, built around a shaded central yard that keeps the house cool through the dry season.',
+    features:['Central courtyard','Study room','Generator house','Water treatment system','Close to Games Village']},
+  {id:7, title:'Bodija Family Bungalow', city:'Ibadan', price:38000000, beds:3, baths:3, size:280, roof:'gable',
+    desc:'A well-kept three-bedroom bungalow in Bodija, on a tree-lined street close to the market and the University of Ibadan.',
+    features:['Mature shade trees','Fitted wardrobes','Borehole','Fenced compound','Close to UI']},
+  {id:8, title:'Old GRA Colonial House', city:'Port Harcourt', price:95000000, beds:5, baths:5, size:520, roof:'hip',
+    desc:'A restored colonial-era house in Old GRA with high ceilings, wraparound veranda, and mature grounds rare in the city centre.',
+    features:['Wraparound veranda','High ceilings','Mature grounds','Restored original flooring','Staff quarters']},
+  {id:9, title:'Asokoro Hillside Duplex', city:'Abuja', price:165000000, beds:5, baths:6, size:560, roof:'flat',
+    desc:'A five-bedroom duplex on the Asokoro hillside with skyline views over the city and a rooftop terrace built for entertaining.',
+    features:['Rooftop terrace','Skyline views','Smart security system','3-car garage','Home office']},
+  {id:10, title:'Nwaniba Waterside Bungalow', city:'Uyo', price:52000000, beds:4, baths:4, size:340, roof:'gable',
+    desc:'A four-bedroom bungalow along the Nwaniba road corridor, ten minutes from the boat jetty, with a wide veranda facing the garden.',
+    features:['Wide veranda','Boys\u2019 quarters','Solar water heater','Fenced compound','Close to Nwaniba jetty']}
+];
+const money = n => '\u20a6' + n.toLocaleString('en-NG');
+
+function roofPath(type){
+  if(type==='flat') return 'M20,70 L200,40 L380,70 L380,80 L20,80 Z';
+  if(type==='hip')  return 'M20,72 L110,38 L290,38 L380,72 L340,72 L200,44 L60,72 Z';
+  return 'M20,72 L200,32 L380,72 Z'; // gable
+}
+function houseSVG(p, i){
+  const ac = ACCENTS[i % ACCENTS.length];
+  const dark = 'color-mix(in srgb,' + ac + ' 65%, black 35%)';
+  const winCols = Math.min(5, Math.max(3, p.beds));
+  let windows = '';
+  for(let c=0;c<winCols;c++){
+    const x = 55 + c*(280/winCols);
+    windows += `<rect x="${x}" y="120" width="26" height="34" fill="#FCEFD6" opacity=".9"/>`;
+  }
+  return `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="220" fill="#DCE7EA"/>
+    <circle cx="345" cy="42" r="22" fill="#F4E3B8"/>
+    <rect x="0" y="150" width="400" height="70" fill="#8FA98C"/>
+    <path d="${roofPath(p.roof)}" fill="${dark}"/>
+    <rect x="20" y="72" width="360" height="90" fill="${ac}"/>
+    ${windows}
+    <rect x="185" y="128" width="30" height="34" fill="#3A2E22"/>
+    <circle cx="60" cy="185" r="16" fill="#5C7A52"/>
+    <circle cx="48" cy="192" r="12" fill="#5C7A52"/>
+    <rect x="0" y="205" width="400" height="15" fill="#B7AA8C"/>
+  </svg>`;
+}
+
+function artStyleAttr(){ return ''; }
+function cardHTML(p, i){
+  return `<div class="card" onclick="goDetail(${p.id})">
+    <div class="p-art">${houseSVG(p,i)}</div>
+    <div class="body">
+      <h3>${p.title}</h3>
+      <div class="loc">${p.city}</div>
+      <div class="price">${money(p.price)}</div>
+      <div class="specs"><span>${p.beds} bed</span><span>${p.baths} bath</span><span>${p.size} m\u00b2</span></div>
+    </div>
+  </div>`;
+}
+
+let activeCity = '';
+function renderFeatured(){
+  document.getElementById('featured-grid').innerHTML = PROPERTIES.slice(0,3).map((p,i)=>cardHTML(p,i)).join('');
+}
+function renderListings(){
+  const city = activeCity || document.getElementById('filter-city').value;
+  const priceRange = document.getElementById('filter-price').value;
+  let list = PROPERTIES;
+  if(city) list = list.filter(p=>p.city===city);
+  if(priceRange){
+    const [lo,hi] = priceRange.split('-').map(Number);
+    list = list.filter(p=>p.price>=lo && p.price<=hi);
+  }
+  document.getElementById('listings-grid').innerHTML =
+    list.length ? list.map((p,i)=>cardHTML(p,i)).join('') : '<p style="opacity:.65;">No listings match those filters.</p>';
+}
+function populateCityFilter(){
+  const sel = document.getElementById('filter-city');
+  Object.keys(CITY_POS).forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o); });
+}
+
+function renderMap(){
+  const svg = document.getElementById('map-svg');
+  let inner = `<rect x="0" y="0" width="400" height="230" fill="none"/>
+    <path d="M60,40 L260,20 L330,60 L320,140 L260,205 L120,210 L50,160 L40,90 Z" fill="var(--taupe)" opacity=".35" stroke="var(--line)"/>`;
+  Object.entries(CITY_POS).forEach(([city,[x,y]])=>{
+    const count = PROPERTIES.filter(p=>p.city===city).length;
+    inner += `<g class="map-pin" data-city="${city}" onclick="pickCity('${city}')">
+      <circle cx="${x}" cy="${y}" r="6.5" fill="var(--sienna)"/>
+      <text x="${x+10}" y="${y+4}">${city} (${count})</text>
+    </g>`;
+  });
+  svg.innerHTML = inner;
+}
+function pickCity(city){
+  activeCity = (activeCity === city) ? '' : city;
+  document.getElementById('filter-city').value = activeCity;
+  document.querySelectorAll('.map-pin').forEach(el=>el.classList.toggle('active', el.dataset.city===activeCity));
+  renderListings();
+}
+
+function renderDetail(id){
+  const p = PROPERTIES.find(x=>x.id===id);
+  if(!p) return;
+  const i = PROPERTIES.indexOf(p);
+  document.getElementById('detail-art').innerHTML = houseSVG(p,i);
+  document.getElementById('d-title').textContent = p.title;
+  document.getElementById('d-loc').textContent = p.city + ', Nigeria';
+  document.getElementById('d-price').textContent = money(p.price);
+  document.getElementById('d-desc').textContent = p.desc;
+  document.getElementById('d-specs').innerHTML = `
+    <div><strong>${p.beds}</strong><span>Bedrooms</span></div>
+    <div><strong>${p.baths}</strong><span>Bathrooms</span></div>
+    <div><strong>${p.size} m\u00b2</strong><span>Floor area</span></div>`;
+  document.getElementById('d-features').innerHTML = p.features.map(f=>`<li>${f}</li>`).join('');
+  const msg = encodeURIComponent(`Hi PrimeNest, I'd like to know more about ${p.title} in ${p.city}.`);
+  document.getElementById('d-wa').href = `https://wa.me/2347012345678?text=${msg}`;
+}
+function goDetail(id){ location.hash = 'detail-' + id; }
+
+const TEAM = [
+  {name:'Amaka Obi', role:'Founder & Lead Agent'},
+  {name:'Efe Tobi', role:'Abuja & PH Listings'},
+  {name:'Grace Udo', role:'Uyo & Client Relations'},
+  {name:'Kelvin Asuquo', role:'Photography & Listings'}
+];
+function renderTeam(){
+  document.getElementById('team-grid').innerHTML = TEAM.map((t,i)=>
+    `<div><div class="avatar" style="--ac:${ACCENTS[i % ACCENTS.length]}"></div><h4>${t.name}</h4><span>${t.role}</span></div>`
+  ).join('');
+}
+
+function router(){
+  const hash = location.hash.replace('#','') || 'home';
+  const isDetail = hash.startsWith('detail-');
+  const pageKey = isDetail ? 'detail' : hash;
+  document.querySelectorAll('.page').forEach(s=>s.classList.remove('active'));
+  const target = document.getElementById('page-' + pageKey);
+  (target || document.getElementById('page-home')).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>
+    b.classList.toggle('active', b.dataset.page === (isDetail ? 'listings' : pageKey)));
+  if(isDetail) renderDetail(Number(hash.split('-')[1]));
+  window.scrollTo(0,0);
+}
+
+document.querySelectorAll('[data-page]').forEach(el=>{
+  el.addEventListener('click', ()=>{ location.hash = el.dataset.page; });
+});
+document.getElementById('filter-city').addEventListener('change', e=>{ activeCity=''; renderListings(); document.querySelectorAll('.map-pin').forEach(p=>p.classList.remove('active')); });
+document.getElementById('filter-price').addEventListener('change', renderListings);
+document.getElementById('contact-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  document.getElementById('c-confirm').style.display = 'block';
+  e.target.reset();
+});
+
+populateCityFilter();
+renderMap();
+renderFeatured();
+renderListings();
+renderTeam();
+window.addEventListener('hashchange', router);
+router();
+</script>
+</body>
+</html>
